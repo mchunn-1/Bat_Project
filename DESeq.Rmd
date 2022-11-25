@@ -1,0 +1,118 @@
+---
+title: "DESeq"
+output:
+  #html_document: default
+  pdf_document: default
+---
+## Loading packages 
+```{r}
+#if installation is need, uncomment the following
+#if (!require("DESeq2")) install.packages("DESeq2"); library(DESeq2)
+#if (!require("apeglm")) install.packages("apeglm"); library(apeglm)
+#if (!require("ggplot2")) install.packages("ggplot2"); library(ggplot2)
+#if (!require("pheatmap")) install.packages("pheatmap"); library(pheatmap)
+
+library(DESeq2)
+library(apeglm)
+library(ggplot2)
+library(pheatmap)
+```
+
+## Loading in the files
+
+```{r}
+#load count matrix and reference 
+#tximport summerization of counts = 'intALL.csv'
+#'ref.txt' is the reference file needed by deseq
+
+dat <- read.csv("intAll.csv", header=T, row.names = 1)
+info <- read.table("ref.txt", header = T, sep ="\t")
+
+```
+
+## Running DESeq
+
+```{r}
+dds <- DESeqDataSetFromMatrix(dat, info, ~diet)
+```
+
+## Editing DESeq output 
+
+```{r}
+#removes low expressed genes
+keep <- rowSums(counts(dds)) >= 100
+dds <- dds[keep,]
+ddsDE <- DESeq(dds)
+
+###uncomment to export normalized read count
+normCounts <- counts(ddsDE, normalized = T)
+#write.csv(normCounts, "normal.allCounts.txm.csv")
+
+#p value less than .05 is diff. exp.   
+res <- results(ddsDE, alpha = 0.05)
+
+# order based on p adjusted value 
+resOrdered <- res[order(res$padj),]
+
+###uncomment to export ordered file 
+#write.csv(resOrdered, "deSeq.order.csv")
+```
+
+## Editing data for plots  
+
+```{r}
+
+#files generated above 
+normCount <- read.csv("normal.allCounts.txm.csv", row.names = 1)
+deSeqRes <- read.csv("deSeq.order.csv", row.names = 1)
+
+#if padj is <= .05, the value is significant 
+deSeqRes$Significant <- ifelse(deSeqRes$padj <= 0.05, "Yes", "No")
+#taking out any na values 
+deSeqRes <- na.omit(deSeqRes)
+head(deSeqRes)
+
+```
+
+##Creating Volcano plot
+
+```{r}
+#baseMean is the normalized count values, dividing by size factor, taken over all samples.. use log bc it needs to be put on a log scale 
+#log2foldchage is the effect size estimate
+## ggplot(deSeqRes, aes( x = log10(baseMean), y = log2FoldChange, color = Significant)) + geom_point()
+
+#volcano plot.. 
+ggplot(deSeqRes, aes(x = log2FoldChange, y = -log10(padj), color = Significant)) + geom_point() 
+
+```
+## Creating heatmap 
+
+```{r}
+#editing data for heat map 
+signi <- subset(deSeqRes, padj <= 0.05)
+allSig <- merge(normCount, signi, by = 0)
+sigCounts <- allSig[,2:13]
+row.names(sigCounts) <- allSig$Row.names
+
+#creating heatmap
+#log2 looks at exponents instead of raw numbers, is used to  normalize the data .. if there is a 0 it wont work so you have to do +1
+#scale compares expression within a col/row... finds median read count of a row/col.. doesn't look at raw numbers
+pheatmap(log2(sigCounts + 1), scale = "row", show_rownames = F, treeheight_row = 0, treeheight_col = 50)
+```
+
+## Looking at the outliers from Volcano plot 
+```{r}
+#adding in column to show -log10(padj) values that are seen on the volcano plot above
+deSeqRes$neglog10 <- (-log10(deSeqRes$padj))
+##neglog10 values above 10 are observed to be outliers according to the volcano plot 
+head(deSeqRes)
+```
+## Plotting just the outliers 
+```{r}
+signi <- subset(deSeqRes, neglog10 >= 10)
+allSig <- merge(normCount, signi, by = 0)
+sigCounts <- allSig[,2:13]
+row.names(sigCounts) <- allSig$Row.names
+pheatmap(log2(sigCounts + 1), scale = "row", show_rownames = F,treeheight_row = 0)
+```
+
