@@ -24,4 +24,4 @@ The tximport file is then used to create a count matrix as input for DESeq2. Not
 
 ![Model](https://github.com/mchunn-1/Bat_Project/blob/main/Screen%20Shot%202023-01-17%20at%202.02.12%20PM.png)
 
-From there, the count matrix can be used to run DESeq2. The R Markdown file titled "DESeq.Rmd" shows the code used to run DESeq2.
+From there, the count matrix can be used to run DESeq2. The R Markdown file titled "DESeq.Rmd" shows the code used to run DESeq2. The "DESeq.docx" is the knitted form of the R markdown and can be downloaded (this will show plots).
