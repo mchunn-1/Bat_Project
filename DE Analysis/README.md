@@ -13,3 +13,4 @@ Note that while the Salmon out file contains all trascripts within the assmeblie
 The next step is tximport which is used to generate the count matrix needed to run DESeq2. As input for tximport you will neeed the Salmon quant file and a tx-to-gene file. The tx-to-gene file is a two-column file consisting of the transcript and the transcript id. Here is an example:
 
 The tximport file is then used to create a count matrix as input for DESeq2. Note that counts will need to be transformed to whole numbers before running DESeq2. An example count matrix is as follows:
+
