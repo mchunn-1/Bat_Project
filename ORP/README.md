@@ -6,10 +6,12 @@ In summary, as described by MacManes, the Oyster River Protocol includes the fol
 * Read trimming with Trimmomatic 
 * Error correcting with Rcorrecter
 * Assembly with Trinity (kmer length 25, without read normalization, rnaSPAdes (kmer length 55 and 75), and TransABySS (kmer length 32) 
-* Merging/clustering intoisoform groups with OrthoFuse
+* Merging/clustering into isoform groups with OrthoFuse
 * Transcript redundancy reduction with cd-hit
 * Transcript identity identification with Diamond
 * Gene expression quantification with Salmon  
 * Evaluation with BUSCO and TransRate
 
-To read the ORP manuscript please click [here](https://peerj.com/articles/5428/), or for the ORP website click [here](https://oyster-river-protocol.readthedocs.io/en/latest/index.html#)
+To read the ORP manuscript please click [here](https://peerj.com/articles/5428/), or for the ORP website click [here](https://oyster-river-protocol.readthedocs.io/en/latest/index.html#).
+
+When running the ORP, it is safe to assume you will need 1.5–2 Gb per million paired-end reads. 
