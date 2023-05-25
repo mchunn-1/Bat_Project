@@ -1,0 +1,58 @@
+---
+title: "intersection_script"
+author: "Morgan Chunn"
+output: html_document
+ 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading packages 
+```{r}
+if (!require("UpSetR")) install.packages("UpSetR"); library(UpSetR)
+```
+
+
+# all genes.. boolean data file 
+```{r}
+dat <- read.csv("countsFileBoolean.csv", header=T, row.names = 1)
+head(dat)
+```
+
+# plot showing intersections between all species/all genes 
+```{r}
+upset(dat, nsets =12 , number.angles = 30, point.size = 2, line.size = 1, 
+      mainbar.y.label = "Gene Intersection Size", 
+      text.scale = c(1, 1, 1, 1, 0.75, 0.75))
+```
+
+# plot showing intersections between specfic speices (Frugivore/Piscivore)
+```{r}
+
+upset(dat, sets = c("nole_p", "stlu_f", "chvi_f"), sets.bar.color = "#56B4E9",
+order.by = "freq", empty.intersections = "on", mainbar.y.label = "Gene Intersections" , query.legend = "top", queries = list(list(query = intersects, params = list("stlu_f","chvi_f"), color = "orange", active = T, query.name = "Frugivores"), (list(query = intersects, params = list("nole_p","chvi_f"), color = "red", active = T, query.name = "Frugivore/Piscivore"))))
+
+```
+
+# plot showing intersections between specfic speices (Frugivore/Insectivore)
+### top three intersection groups were between frugivores. 
+```{r}
+
+upset(dat, sets = c("stlu_f", "mawa_i", "arja_f", "chvi_f"), sets.bar.color = "#56B4E9",
+order.by = "freq", empty.intersections = "on", mainbar.y.label = "Gene Intersections", queries = list(list(query = intersects, params = list("stlu_f", "arja_f", "chvi_f"), color = "orange", active = T),list(query = intersects, params = list("stlu_f","arja_f"), color = "orange", active = T),list(query = intersects, params = list("stlu_f","chvi_f"), color = "orange", active = T), (list(query = intersects, params = list("stlu_f","chvi_f", "mawa_i"), color = "red", active = T))))
+
+
+```
+
+# plot showing intersections between specfic speices (Frugivore/Insectivore) and presence specifc gene 
+```{r}
+func <- function(row, species) {
+    dat <- (row["gene"] %in% species) 
+}
+
+upset(dat, sets = c("nole_p", "stlu_f", "chvi_f"), sets.bar.color = "#56B4E9",
+order.by = "freq", empty.intersections = "on", mainbar.y.label = "Gene Intersections" , query.legend = "top", queries = list(list(query = func, params = list(1534), color = "blue", active = F, query.name = "specific gene"),list(query = intersects, params = list("stlu_f","chvi_f"), color = "orange", active = T, query.name = "Frugivores"), (list(query = intersects, params = list("nole_p","chvi_f"), color = "red", active = T, query.name = "Frugivore/Piscivore"))))
+    
+```
