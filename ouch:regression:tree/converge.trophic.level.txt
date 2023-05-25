@@ -1,0 +1,19 @@
+number of shifts: 6
+pBIC score: -245.2312
+edge indices of the shift configuration (column names) and the corresponding shift values:
+           312       122        320       332        329       154
+s.v -0.2533389 0.4593026 -0.1364272 0.2910541 -0.2590263 0.2580094
+
+convergent regimes and edge indices of the shift configuration
+regime 1-> 312
+regime 2-> 122, 332
+regime 3-> 320
+regime 4-> 329
+regime 5-> 154
+
+                                    [,1]
+adaptation rate (alpha)     9.806135e+00
+variance (sigma2)           1.522900e-01
+stationary variance (gamma) 7.765038e-03
+logLik                      1.751568e+02
+

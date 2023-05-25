@@ -1,0 +1,13 @@
+                                       [,1]
+Anoura_geoffroyi                 -0.3416192
+Artibeus_jamaicensis             -0.3416192
+Carollia_brevicauda              -0.3416192
+Chiroderma_villosum              -0.3416192
+Desmodus_rotundus                 0.2873764
+Glossophaga_soricina             -0.3416192
+Hsunycteris_thomasi              -0.3416192
+Macrotus_waterhousii_waterhousii  0.2873764
+Mormoops_blainvillei              0.2873764
+Noctilio_leporinus                0.2873764
+Pteronotus_pusillus               0.2873764
+Sturnira_ludovici                -0.3416192
